@@ -80,9 +80,29 @@ WHERE isyeri=( SELECT marka_isim
 			   WHERE marka_id=100 )
 
 --INTERVIEW QUESTION:calisanlar3 tablosunda max maaşı alan çalışanın tüm fieldlarını listeleyiniz. 
-   
+
+SELECT *
+FROM calisanlar3
+WHERE maas=( SELECT MAX(maas) 
+			 FROM calisanlar3 )
 
 --Interview Question:calisanlar3 tablosunda ikinci en yüksek maaşı gösteriniz.ÖDEV
+
+SELECT MAX(maas)
+FROM calisanlar3
+WHERE maas < (SELECT MAX(maas)
+              FROM calisanlar3)
+
+--peki kimler?:)
+SELECT * 
+FROM calisanlar3
+WHERE maas=(SELECT MAX(maas)
+            FROM calisanlar3
+            WHERE maas < (SELECT MAX(maas)
+                           FROM calisanlar3))
+
+
+
 
 --calisanlar3 tablosunda max veya min maaşı alan çalışanların
 -- tüm fieldlarını gösteriniz.
@@ -200,43 +220,9 @@ WHERE EXISTS (SELECT * FROM mart m WHERE m.urun_isim=n.urun_isim )
 
 --Martta satılıp Nisanda satilmayan ürünlerin URUN_ISIM'lerini ve bu ürünleri
 --MART ayında satın alan MUSTERI_ISIM'lerini listeleyen bir sorgu yazınız. ÖDEV
-SELECT 
-     
-	SELECT m.urun_isim, m.musteri_isim
+
+SELECT musteri_isim,urun_isim
 FROM mart m
-WHERE m.urun_isim NOT IN (SELECT n.urun_isim FROM nisan n) 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	SELECT MAX(maas)
-FROM calisanlar3
-WHERE maas NOT IN (
-    SELECT MAX(maas) FROM calisanlar3
-);   
-	   
+WHERE NOT EXISTS (SELECT * FROM nisan n WHERE n.urun_isim=m.urun_isim)
 
-
-
-
-
-
-
-
-	   
-	   
-	   SELECT MAX(maas) AS ucuncu_en_yuksek_maas
-FROM calisanlar3
-WHERE maas NOT IN (
-    SELECT MAX(maas)
-    FROM calisanlar3
-    WHERE maas NOT IN (
-        SELECT MAX(maas)
-        FROM calisanlar3
-    )
-);
 
